@@ -1,0 +1,65 @@
+﻿@model TaskEFC.ShoppingViewModels.OrderIndexData
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<h1>Orders</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+               OrderDate
+            </th>
+            <th>
+                Customer
+            </th>
+            <th>
+                SuperMarket
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Orders) {
+    string selectedRow = "";
+    if (item.Id == (int?)ViewData["OrderId"])
+    {
+        selectedRow = "success";
+    }
+    string fName = item.Customer.FirstName + " " + item.Customer.LastName;
+    <tr class="@selectedRow">
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderDate)
+            </td>
+            <td>
+                @fName
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SuperMarket.Name)
+            </td>
+            <td>
+                @if (item.OrderDetails != null)
+                {
+                   <td>
+                        @foreach (var prod in item.OrderDetails)
+                        {
+                            @prod.Product.Name @:  @prod.Quantity<br />
+                        }
+                   </td>
+                       }
+                }
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
